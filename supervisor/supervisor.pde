@@ -97,4 +97,25 @@ class Obstaculo{
     p3 = new Vertice( sx, py);
     p4 = new Vertice( sx, sy);
   }
+  boolean eConcorrente(int xI1, int xF1, int yI1, int yF1, int xI2, int xF2, int yI2, int yF2){
+     float bx= xF1 - xI1;
+     float by= yF1 - yI1;
+     float dx= xF2 - xI2;
+     float dy= yF2 - yI2;
+     float constPerp =bx*dy - by*dx;
+     if(constPerp==0)
+       return false;
+      float cx= xI2 -xI1;
+      float cy= yI2- yI1;
+      float t = (cx*dy - cy*dx)/ constPerp;
+       
+      float u = (cx*by - cy*bx)/constPerp;
+      if(t<0 ||t>1)
+          return false;
+        else if(u<0 || u<1)
+          return false;
+          else 
+            return true;
+          
+   }
 }
