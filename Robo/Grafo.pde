@@ -14,8 +14,8 @@ class Grafo {
     return v;
   }
   Aresta addAresta(PVector v1, PVector v2) {
-    Aresta e = new Aresta(v1, v2);
-    arestas.add(e);
-    return e;
+    Aresta a = new Aresta(v1, v2);
+    arestas.add(a);
+    return a;
   }
 }
