@@ -75,6 +75,5 @@ void iniciarBluetooth(){
 task main()
 {
 
-	rotateToLeft(30,90);
-	rotateToRight(30,90);
+	iniciarBluetooth();
 }
