@@ -50,24 +50,24 @@ void rotateToLeft(int velocity, int degrees) {
 	motor[motorB] = 0;
 }
 void iniciarBluetooth(){
-   int messageTam;
-   int valor;
+  int messageTam;
+   ubyte valor;
    char bufferEntrada[15];
     messageTam= cCmdMessageGetSize(entradaBT);
     cCmdMessageRead(bufferEntrada, messageTam, entradaBT);
     if(bufferEntrada[0] == 'A' || bufferEntrada[0] =='a'){
-      if(bufferEntrada[1] == 'D' || bufferEntrada [1] == 'd'){
-        valor= (int)bufferEntrada[2];
-        rotateToRight(velocity,valor);
-      }
-      else if(bufferEntrada[1] == 'E' || bufferEntrada [1] == 'e'){
-          valor= (int)bufferEntrada[2];
-          rotateToLeft(velocity,valor);
-         }
-	     else if (bufferEntrada [0] == 'D' || bufferEntrada [0]== 'd'){
-	         valor= bufferEntrada[1];
-	         moveForward(valor, velocity);
-	     }
+	      if((ubyte) bufferEntrada[1] >= 0){
+	        valor= (ubyte)bufferEntrada[1];
+	        rotateToRight(velocity,valor);
+	      } else if((ubyte)bufferEntrada[1] < 0 ){
+	          valor= (ubyte)bufferEntrada[1];
+	          rotateToLeft(velocity,valor);
+	      }
+	   } else if (bufferEntrada [0] == 'D' || bufferEntrada [0]== 'd'){
+	      valor= bufferEntrada[1];
+	      moveForward(valor, velocity);
+	   }
+    return ;
     return ;
   }
 }
