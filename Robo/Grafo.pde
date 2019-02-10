@@ -9,7 +9,7 @@ class Grafo {
     arestas = new ArrayList<Aresta>();
   }
   PVector addVertice(int x, int y) {
-    PVector v = new PVector(x,y);
+    PVector v = new PVector(x, y);
     vertices.add(v);
     return v;
   }

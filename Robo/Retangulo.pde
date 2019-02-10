@@ -1,6 +1,6 @@
-class Retangulo{
+class Retangulo {
   List<PVector> vertices;
-  Retangulo(int px, int py, int sx, int sy){
+  Retangulo(int px, int py, int sx, int sy) {
     vertices = new ArrayList<PVector>();
     vertices.add(grafo.addVertice(px, py));
     vertices.add(grafo.addVertice(px, sy));
@@ -11,11 +11,11 @@ class Retangulo{
     grafo.addAresta(vertices.get(1), vertices.get(3));
     grafo.addAresta(vertices.get(2), vertices.get(3));
   }
-  boolean contem(PVector vertice){
-    for(PVector v : vertices){
-      if(vertice == v)
+  boolean contem(PVector vertice) {
+    for (PVector v : vertices) {
+      if (vertice == v)
         return true;
-     }
-   return false;
+    }
+    return false;
   }
 }

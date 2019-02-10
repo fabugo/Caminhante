@@ -3,11 +3,16 @@ class Aresta {
   PVector v2;
   int distancia;
   Aresta(PVector v1, PVector v2) {
-      this.v1 = v1;
-      this.v2 = v2;
-      this.distancia = (int) dist(v1.x,v1.y,v2.x,v2.y);
+    this.v1 = v1;
+    this.v2 = v2;
+    this.distancia = (int) dist(v1.x, v1.y, v2.x, v2.y);
   }
-  boolean contem(PVector v){
+  boolean contem(PVector v) {
     return (v == v1 || v == v2);
+  }
+  boolean igual(PVector v1, PVector v2) {
+    if ((v1 == this.v2 && v2 == this.v1) || (v2 == this.v2 && v1 == this.v1))
+      return true;
+    return false;
   }
 }
