@@ -145,9 +145,7 @@ void keyPressed() {
       removeArestas(atual, auxArestas);
     }
     for(PVector c : caminho){
-    serial.write("A"+c.angleBetween());
-    
-    
+      
     }
     
     
