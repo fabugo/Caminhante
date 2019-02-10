@@ -1,4 +1,7 @@
 import java.awt.geom.Line2D;
+import processing.serial.*;
+Serial serial;
+
 
 boolean novoQuadrado = false, novoDestino = false, novaLinha = false, novoObstaculo = false, novoComeco = true;
 int px, py, sx, sy;
@@ -9,6 +12,7 @@ List<PVector> caminho = new ArrayList<PVector>();
 void setup() {
   size(737, 600);//width = 1.228height || px = 2.72cm
   noLoop();
+  serial = new Serial(this,Serial.list()[0], 9600);
 }
 
 void draw() {
@@ -44,6 +48,8 @@ void draw() {
       strokeWeight(2);
       line(v1.x, v1.y, v2.x, v2.y);
       strokeWeight(1);
+      serial.write("A"+PVector.angleBetween(v1,v2));
+      serial.write("D"+PVector.dist(v1,v2));
     }
     novaLinha = false;
   }
@@ -138,7 +144,14 @@ void keyPressed() {
       caminho.add(atual);
       removeArestas(atual, auxArestas);
     }
-
+    for(PVector c : caminho){
+    serial.write("A"+c.angleBetween());
+    
+    
+    }
+    
+    
+    
     novaLinha = true;
   }
   if (key == 'n') {
