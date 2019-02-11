@@ -4,19 +4,17 @@ import processing.serial.*;
 import pt.citar.diablu.nxt.brick.*;
 import pt.citar.diablu.nxt.protocol.*;
 import pt.citar.diablu.processing.nxt.*;
-Serial serial;
 boolean novoQuadrado = false, novoDestino = false, novaLinha = false, novoObstaculo = false, novoComeco = true;
 int px, py, sx, sy;
 Graph grafo = new Graph();
 ArrayList<Obstaculo> obstaculos = new ArrayList<Obstaculo>();
 GraphSearch_Dijkstra search = new GraphSearch_Dijkstra(grafo);
 GraphNode[] rota;
-LegoNXT lego;
+//LegoNXT lego;
 void setup() {
   size(737, 600);//width = 1.228height || px = 2.72cm
   noLoop();
   //lego = new LegoNXT(this, Serial.list()[1]);
-  //serial = new Serial(this, Serial.list()[1], 9600);
 }
 void draw() {
   if (novoComeco) {
@@ -44,7 +42,7 @@ void draw() {
   if (novaLinha) {
     for (GraphEdge e : grafo.getAllEdgeArray()) {
       stroke(#0000FF);
-      strokeWeight(2);
+      strokeWeight(1);
       line(e.from().xf(), e.from().yf(), e.to().xf(), e.to().yf());
     }
     for (int i = 1; i < rota.length; i++) {
@@ -77,7 +75,21 @@ void keyPressed() {
     rota = search.getRoute();
   }
   if (key == 'c') {
-    
+    String sequencia  = "";
+
+    PVector v0 = new PVector(0, 1);
+
+    for (int i = 1; i < rota.length; i++) {
+
+      PVector v1 = new PVector(rota[i-1].xf(), rota[i-1].yf());
+      PVector v2 = new PVector(rota[i].xf(), rota[i].yf());
+      int distancia = (int) dist(v1.x, v1.y, v2.x, v2.y);
+      int angulo = (int) degrees(v2.sub(v1).heading() - v0.heading());
+      sequencia += " "+angulo+" "+distancia;
+      v0 = v2;
+    }
+    println(sequencia);
+    //lego.sendMsg(0, sequencia);
   }
   redraw();
 }
@@ -125,9 +137,9 @@ void criarObstaculo(int px, int py, int sx, int sy) {
 class Obstaculo {
   GraphNode n1, n2, n3, n4;
   Obstaculo(GraphNode n1, GraphNode n2, GraphNode n3, GraphNode n4) {
-    this.n1 = n1;  
-    this.n2 = n2; 
-    this.n3 = n3; 
+    this.n1 = n1;
+    this.n2 = n2;
+    this.n3 = n3;
     this.n4 = n4;
   }
   boolean contem(GraphNode n) {
