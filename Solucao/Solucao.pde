@@ -1,16 +1,22 @@
 import pathfinder.*; //<>//
 import java.awt.geom.Line2D;
 import processing.serial.*;
+import pt.citar.diablu.nxt.brick.*;
+import pt.citar.diablu.nxt.protocol.*;
+import pt.citar.diablu.processing.nxt.*;
 Serial serial;
 boolean novoQuadrado = false, novoDestino = false, novaLinha = false, novoObstaculo = false, novoComeco = true;
 int px, py, sx, sy;
 Graph grafo = new Graph();
 ArrayList<Obstaculo> obstaculos = new ArrayList<Obstaculo>();
 GraphSearch_Dijkstra search = new GraphSearch_Dijkstra(grafo);
+GraphNode[] rota;
+LegoNXT lego;
 void setup() {
   size(737, 600);//width = 1.228height || px = 2.72cm
   noLoop();
-  serial = new Serial(this,Serial.list()[0], 9600);
+  //lego = new LegoNXT(this, Serial.list()[1]);
+  //serial = new Serial(this, Serial.list()[1], 9600);
 }
 void draw() {
   if (novoComeco) {
@@ -29,11 +35,10 @@ void draw() {
       GraphNode destino = new GraphNode(id, (px+sx)/2, (py+sy)/2);
       grafo.addNode(destino);
       fill(#00FF00);
-      circle(destino.xf(), destino.yf(), 30);
+      rect(destino.xf(), destino.yf(), 55, 55);
       novoDestino  = false;
-    } else {
-      criarObstaculo(px, py, sx, sy);
-    }
+    } else 
+    criarObstaculo(px, py, sx, sy);
     novoQuadrado = false;
   }
   if (novaLinha) {
@@ -41,13 +46,11 @@ void draw() {
       stroke(#0000FF);
       strokeWeight(2);
       line(e.from().xf(), e.from().yf(), e.to().xf(), e.to().yf());
-      println(e.from().xf(), e.from().yf(), "ate", e.to().xf(), e.to().yf());
     }
-    for (GraphEdge e : search.getExaminedEdges()) {
+    for (int i = 1; i < rota.length; i++) {
       stroke(#00FF00);
       strokeWeight(2);
-      line(e.from().xf(), e.from().yf(), e.to().xf(), e.to().yf());
-      println(e.from().xf(), e.from().yf(), "ate", e.to().xf(), e.to().yf());
+      line(rota[i-1].xf(), rota[i-1].yf(), rota[i].xf(), rota[i].yf());
     }
   }
 }
@@ -64,30 +67,17 @@ void mouseReleased() {
 void keyPressed() {
   if (key == ENTER) {
     novaLinha = true;
-  }
-  if (key == 'n') {
     for (GraphNode n1 : grafo.getNodeArray()) {
       for (GraphNode n2 : grafo.getNodeArray()) {
         if (n1.id() != n2.id() && !tocaAlguem(n1, n2) && !mesmoQuadrado(n1, n2))
           grafo.addEdge(n1.id(), n2.id(), dist(n1.xf(), n1.yf(), n2.xf(), n2.yf()));
       }
     }
-  }
-  if (key == 'r') {
-    search.search(1,2,true);
+    search.search(0, 1, true);
+    rota = search.getRoute();
   }
   if (key == 'c') {
-    GraphNode[] rota = search.getRoute();
-    char distancia;
-    char angulo;
-    for(int i = 1; i < rota.length; i++) {
-      PVector v1 = new PVector(rota[i-1].xf(),rota[i-1].yf());
-      PVector v2 = new PVector(rota[i].xf(),rota[i].yf());
-      distancia = (char) (dist(v1.x,v1.y,v2.x,v2.y) * 2.72);
-      angulo = (char) (PVector.angleBetween(v1, v2));
-      serial.write("D"+distancia);
-      serial.write("A"+angulo);
-    }
+    
   }
   redraw();
 }
@@ -132,7 +122,6 @@ void criarObstaculo(int px, int py, int sx, int sy) {
   rectMode(CORNER);
   rect(n1.xf(), n1.yf(), n4.xf()-n1.xf(), n4.yf()-n1.yf());
 }
-
 class Obstaculo {
   GraphNode n1, n2, n3, n4;
   Obstaculo(GraphNode n1, GraphNode n2, GraphNode n3, GraphNode n4) {
