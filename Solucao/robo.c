@@ -22,9 +22,17 @@ void readDataMsg(){
   char bufferEntrada[100];
   cCmdMessageRead(bufferEntrada, messageTam, entrada);
 
-  //for(int i = 0; i < messageTam; i++){
-
-  //}
+  for(int i = 0; i < messageTam; i++){
+    if(i%2!=0){
+     if (bufferEntrada[i]<0){
+       rotateToLeft(velocity, bufferEntrada[i]);
+      }else
+           rotateToRight(velocity, bufferEntrada[i]);
+    }
+    else{
+      moveForward(bufferEntrada[i], velocity);
+    }
+  }
   return;
 }
 task main{
