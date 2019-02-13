@@ -83,8 +83,12 @@ void keyPressed() {
 
       PVector v1 = new PVector(rota[i-1].xf(), rota[i-1].yf());
       PVector v2 = new PVector(rota[i].xf(), rota[i].yf());
-      int distancia = (int) dist(v1.x, v1.y, v2.x, v2.y);
-      int angulo = (int) degrees(v2.sub(v1).heading() - v0.heading());
+      String distancia = ""+((int) dist(v1.x, v1.y, v2.x, v2.y));
+      String angulo = ""+((int) degrees(v2.sub(v1).heading() - v0.heading()));
+      if(distancia.length() < 4)
+        distancia = String.format ("%4.4s", distancia);
+      if(distancia.length() < 4)
+        angulo = String.format ("%4.4s", angulo);
       sequencia += " "+angulo+" "+distancia;
       v0 = v2;
     }

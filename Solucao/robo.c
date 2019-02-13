@@ -1,6 +1,7 @@
 #pragma config(Motor,  motorA,          LeftMotor,     tmotorNormal, PIDControl, encoder)
 #pragma config(Motor,  motorB,          RightMotor,    tmotorNormal, PIDControl, encoder)
 const TMailboxIDs entrada = mailbox1;
+int velocity = 20;
 void checaCon()
 {
   if (nBTCurrentStreamIndex >= 0){
