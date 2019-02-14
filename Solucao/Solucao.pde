@@ -10,11 +10,12 @@ Graph grafo = new Graph();
 ArrayList<Obstaculo> obstaculos = new ArrayList<Obstaculo>();
 GraphSearch_Dijkstra search = new GraphSearch_Dijkstra(grafo);
 GraphNode[] rota;
-//LegoNXT lego;
+LegoNXT lego;
 void setup() {
   size(737, 600);//width = 1.228height || px = 2.72cm
   noLoop();
-  //lego = new LegoNXT(this, Serial.list()[1]);
+  println(Serial.list());
+  lego = new LegoNXT(this, Serial.list()[1]);
 }
 void draw() {
   if (novoComeco) {
@@ -83,17 +84,17 @@ void keyPressed() {
 
       PVector v1 = new PVector(rota[i-1].xf(), rota[i-1].yf());
       PVector v2 = new PVector(rota[i].xf(), rota[i].yf());
-      String distancia = ""+((int) dist(v1.x, v1.y, v2.x, v2.y));
+      String distancia = ""+((int) (dist(v1.x, v1.y, v2.x, v2.y)/2.72));
       String angulo = ""+((int) degrees(v2.sub(v1).heading() - v0.heading()));
       if(distancia.length() < 4)
         distancia = String.format ("%4.4s", distancia);
-      if(distancia.length() < 4)
+      if(angulo.length() < 4)
         angulo = String.format ("%4.4s", angulo);
-      sequencia += " "+angulo+" "+distancia;
+      sequencia += angulo+","+distancia+",";
       v0 = v2;
     }
     println(sequencia);
-    //lego.sendMsg(0, sequencia);
+    lego.sendMsg(0, sequencia);
   }
   redraw();
 }
